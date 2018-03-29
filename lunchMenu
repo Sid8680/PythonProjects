@@ -1,0 +1,33 @@
+import urllib.request
+import datetime
+import json
+
+def getMenuBasedonDate(todayV):
+    todDat = todayV.strftime('%Y'+'/'+ '%m' +'/'+ '%d')
+    dynLink = "http://fcps.nutrislice.com/menu/api/digest/school/cunningham-park-elementary/menu-type/lunch/date/"+ todDat + "/"
+    print(dynLink)
+    with urllib.request.urlopen(dynLink) as response:    
+        #html = json.loads(response.read())
+        html = json.loads(response.read())
+        menuItems = [html['menu_items']]
+        holidaytext = [html['holiday_text']]
+        if len (holidaytext) > 0: 
+            #print(holidaytext)
+            print(str(holidaytext[0]))
+        else:
+            print(menuItems)    
+
+weekno = datetime.datetime.today().weekday()
+
+if weekno == 5:
+    print('Today is a Saturday, here is the menu for Monday')
+    today = datetime.date.today() + datetime.timedelta(days=2)
+    getMenuBasedonDate(today)
+elif weekno ==6:
+    print('Today is a Sunday, here is the menu for Monday')
+    today = datetime.date.today() + datetime.timedelta(days=1)
+    getMenuBasedonDate(today)
+else:
+    today = datetime.date.today()
+    getMenuBasedonDate(today)
+    
